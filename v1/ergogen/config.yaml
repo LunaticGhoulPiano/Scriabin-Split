@@ -1,0 +1,293 @@
+# presets
+meta:
+  engine: 4.2.1 # ergogen version
+  name: Scriabin-Split
+  side: left
+  version: 0.0.1
+  author: LunaticGhoulPiano
+  url: https://github.com/LunaticGhoulPiano/Scriabin-Split
+  switch:
+    $extends: switch_units.mx # <======================================== set your switch type here, refer to switch_units
+switch_units: # switch unit configurations
+  # Official basic units: https://docs.ergogen.xyz/units
+  ## U: 19.05 # 19.05mm MX spacing
+  ## u: 19 # 19mm MX spacing
+  ## cx: 18 # 18mm Choc X spacing
+  ## cy: 17 # 17mm Choc Y spacing
+  mx:
+    # switch reference: https://cdn.sparkfun.com/datasheets/Components/Switches/MX%20Series.pdf
+    # general units
+    kx: U
+    ky: U
+    px: U + 1
+    py: U
+    # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
+    # maybe reference this: https://github.com/swill/kad/issues/14
+    stab_w: 7
+    stab_h: 14
+    stab_offset: -1 # This means south stabs, use `orient` to rotate them for north facing scenarios
+    stab_spacing_2kx: kx / 2 + stab_w / 2 + ((23.8 / 2) - (14 / 2) - (stab_w / 2)) # The complex formula has two magic numbers. 14 is the size of a switch cutout for a plate. 23.8 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
+    # switch hole units (e.g. MXNA-11NB, 0.551 +- 0.002 inch * 25.4 ≈ 14 mm)
+    switch_hole_x: 14
+    switch_hole_y: 14
+    outline_extend_x: 21
+    outline_extend_y: 0
+  choc:
+    # switch reference: http://www.kailh.com/product/Ms/Choc/
+    # general units
+    kx: cx
+    ky: cy
+    px: cx + 1
+    py: cy + 2
+    # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
+    stab_w: 5.5
+    stab_h: 11.5
+    stab_offset: 0 # This means south stabs, use `orient` to rotate them for north facing scenarios
+    stab_spacing_2kx: kx / 2 + stab_w / 2 + ((24 / 2) - (11.5 / 2) - (stab_w / 2)) # The complex formula has two magic numbers. 11.5 is the size of a switch cutout for a plate. 24 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
+    # switch hole units (V2, e.g. CPG135301D02, 13.95 +- 0.05 mm ≈ 14 mm)
+    switch_hole_x: 13.8
+    switch_hole_y: 13.8
+    outline_extend_x: 21
+    outline_extend_y: 0
+units:
+  # load choosed switch actual units
+  $extends: meta.switch
+  # stagger setting
+  offset_height: 3.5
+  # left_function setting
+  left_f_key_diff: 1.25 - 1
+  left_half_of_f_key_diff: (1.25 - 1) / 2
+# switch layout
+points:
+  zones:
+    # ====== Left Hand ======
+    # Crossing points: "+" means used crossing points, "x" means unused crossing points
+    # Naming of columns and rows:
+    #              c0_externel c1_outer c2_pinky c3_ring c4_middle c5_index c6_inner
+    # r0_numbers         +         +        +       +        +         +       +
+    # r1_top             x         +        +       +        +         +       +
+    # r2_home            x         +        +       +        +         +       +
+    # r3_bottom          x         +        +       +        +         +       +
+    # r4_modifiers       +         +        +       +        +         +       +
+    left_main_keys:
+      key:
+        padding: py
+        spread: px
+      columns:
+        c0_externel:
+          rows:
+            r3_bottom.skip: true
+            r2_home.skip: true
+            r1_top.skip: true
+            r0_numbers.width: kx
+        c1_outer:
+          rows:
+            r3_bottom:
+              width: 2.25 kx
+              shift: [-(2.25 / 2 - 0.5) kx, 0]
+              tags: [need_stabs]
+            r2_home:
+              width: 1.75 kx
+              shift: [((2.25 - 1.75) / 2) kx, 0]
+            r1_top:
+              width: 1.5 kx
+              shift: [((1.75 - 1.5) / 2) kx, 0]
+            r0_numbers:
+              width: kx
+              shift: [((1.5 - 1) / 2) kx, 0]
+        c2_pinky.key:
+          stagger: offset_height
+          width: kx
+        c3_ring.key:
+          stagger: offset_height
+          width: kx
+        c4_middle.key:
+          stagger: offset_height
+          width: kx
+        c5_index.key:
+          stagger: -offset_height
+          width: kx
+        c6_inner.key:
+          stagger: -offset_height
+          width: kx
+      rows:
+        r3_bottom:
+        r2_home:
+        r1_top:
+        r0_numbers:
+    # left row 4
+    left_function_keys:
+      anchor:
+        ref: left_main_keys_c0_externel_r0_numbers
+        shift: [0, -4 * py] 
+      key:
+        padding: py
+        spread: px
+        width: 1.25 kx
+      columns:
+        c0_externel:
+          rows.r4_modifiers:
+            width: kx
+            shift: [-left_f_key_diff px, 0]
+        c1_outer:
+          rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff) px, 0]
+        c2_pinky:
+          rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff + left_f_key_diff) px, offset_height]
+        c3_ring:
+          rows.r4_modifiers.shift: [(-left_f_key_diff + 2 * left_f_key_diff + left_half_of_f_key_diff) px, 2 * offset_height]
+        c4_middle:
+          rows.r4_modifiers.shift: [(-left_f_key_diff + 3 * left_f_key_diff + left_half_of_f_key_diff) px, 2 * offset_height]
+        c5_index:
+          rows.r4_modifiers.shift: [(-left_f_key_diff + 4 * left_f_key_diff + left_half_of_f_key_diff) px, offset_height]
+      rows:
+        r4_modifiers:
+    # left thumb (space)
+    left_thumb_keys:
+      anchor:
+        ref: left_main_keys_c6_inner_r3_bottom
+        shift: [1.3 px, -1.2 py]
+        rotate: 75
+      key:
+        width: 2 kx
+        tags: [need_stabs]
+      columns:
+        c6_inner.rows.r4_modifiers:
+
+    # ====== Right Hand ======
+    # Crossing points: "+" means used crossing points, "x" means unused crossing points
+    # Naming of columns and rows:
+    # c0_inner c1_index c2_middle c3_ring c4_pinky c5_outer c6_externel c7_last
+    #    +         +         +       +        +        +         +         x    r0_numbers
+    #    +         +         +       +        +        +         +         +    r1_top
+    #    +         +         +       +        +        +         +         x    r2_home
+    #    +         +         +       +        +        +         +         x    r3_bottom
+    #    +         +         +       +        +        +         +         x    r4_modifiers
+    #    +         x         x       x        x        x         x         x    r5_thumb
+    right_main:
+      anchor:
+        shift: [250, 0] # space between 2 boards
+      key:
+        padding: py
+        spread: px
+      columns:
+        c0_inner.key.width: kx
+        c1_index.key:
+          stagger: offset_height
+          width: kx
+        c2_middle.key:
+          stagger: offset_height
+          width: kx
+        c3_ring.key:
+          stagger: -offset_height
+          width: kx
+        c4_pinky.key:
+          stagger: -offset_height
+          width: kx
+        c5_outer.key:
+          stagger: -offset_height
+          width: kx
+        c6_externel:
+          rows:
+            r4_modifiers.width: kx
+            r3_bottom:
+              width: 2.75 kx
+              shift: [((2.75 - 1) / 2) kx, 0]
+              tags: [need_stabs]
+            r2_home:
+              width: 2.25 kx
+              shift: [-((2.75 - 2.25) / 2) kx, 0]
+              tags: [need_stabs]
+            r1_top:
+              width: kx
+              shift: [-(((2.75 - 1) / 2) - ((2.75 - 2.25) / 2)) kx, 0]
+            r0_numbers:
+              width: 2 kx
+              shift: [((2 - 1) / 2) kx, 0]
+              tags: [need_stabs]
+        c7_last.rows:
+          r4_modifiers.skip: true
+          r3_bottom.skip: true
+          r2_home.skip: true
+          r1_top:
+            width: 1.5 kx
+            shift: [((1.5 - 1) / 2) kx, 0]
+          r0_numbers.skip: true
+      rows:
+        r4_modifiers:
+        r3_bottom:
+        r2_home:
+        r1_top:
+        r0_numbers:
+    # right row 5
+    right_thumb:
+      anchor:
+        ref: right_main_c0_inner_r4_modifiers
+        shift: [-1.1 px, -0.8 py]
+        rotate: -75
+      key:
+        width: 2 kx
+        tags: [need_stabs]
+      columns:
+        c0_inner.rows.r5_thumb:
+outlines:
+  # 1. define switch hole
+  raw:
+    - what: rectangle
+      where: true
+      size: [px, py]
+  # 2. define stabilizer hole
+  stabs:
+    - what: rectangle
+      where: need_stabs
+      size: [stab_w, stab_h]
+      adjust:
+        shift: [stab_spacing_2kx, stab_offset]
+    - what: rectangle
+      where: need_stabs
+      size: [stab_w, stab_h]
+      adjust:
+        shift: [-stab_spacing_2kx, stab_offset]
+  # 3. generate left outer frame
+  pasted_left:
+    - what: rectangle
+      where: /^left.*/
+      size: [px + outline_extend_x, py + outline_extend_y]
+      bound: true
+  # 4. generate right outer frame
+  pasted_right:
+    - what: rectangle
+      where: /^right.*/
+      size: [px + outline_extend_x, py + outline_extend_y]
+      bound: true
+  # 5. left plate
+  plate_left:
+    # get outer frame
+    - what: outline
+      name: pasted_left
+    # dig switch hole
+    - what: rectangle
+      where: /^left.*/
+      size: [switch_hole_x, switch_hole_y]
+      operation: subtract
+    # dig stabalizer hole
+    - what: outline
+      name: stabs
+      operation: subtract
+  # 6. right plate
+  plate_right:
+    - what: outline
+      name: pasted_right
+    - what: rectangle
+      where: /^right.*/
+      size: [switch_hole_x, switch_hole_y]
+      operation: subtract
+    - what: outline
+      name: stabs
+      operation: subtract
+  # 7. preview
+  preview:
+    - what: outline
+      name: plate_left
+    - what: outline
+      name: plate_right
+      operation: stack

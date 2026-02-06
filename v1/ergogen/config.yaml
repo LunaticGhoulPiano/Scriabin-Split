@@ -107,12 +107,14 @@ points:
         spread: ks
       columns:
         c0_externel:
+          key.column_net: C0
           rows:
             r3_bottom.skip: true
             r2_home.skip: true
             r1_top.skip: true
             r0_numbers.width: kx
         c1_outer:
+          key.column_net: C1
           rows:
             r3_bottom:
               width: 2.25 kx
@@ -128,25 +130,30 @@ points:
               width: kx
               shift: [((1.5 - 1) / 2) kx, 0]
         c2_pinky.key:
+          column_net: C2
           stagger: offset_height
           width: kx
         c3_ring.key:
+          column_net: C3
           stagger: offset_height
           width: kx
         c4_middle.key:
+          column_net: C4
           stagger: offset_height
           width: kx
         c5_index.key:
+          column_net: C5
           stagger: -offset_height
           width: kx
         c6_inner.key:
+          column_net: C6
           stagger: -offset_height
           width: kx
       rows:
-        r3_bottom:
-        r2_home:
-        r1_top:
-        r0_numbers:
+        r3_bottom.row_net: R3
+        r2_home.row_net: R2
+        r1_top.row_net: R1
+        r0_numbers.row_net: R0
     # left row 4
     left_function_keys:
       anchor:
@@ -158,18 +165,25 @@ points:
         width: 1.25 kx
       columns:
         c0_externel:
+          key.column_net: C0
           rows.r4_modifiers:
+            row_net: R4
             width: kx
             shift: [-left_f_key_diff ks, 0]
         c1_outer:
+          key.column_net: C1
           rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff) ks, 0]
         c2_pinky:
+          key.column_net: C2
           rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff + left_f_key_diff) ks, offset_height]
         c3_ring:
+          key.column_net: C3
           rows.r4_modifiers.shift: [(-left_f_key_diff + 2 * left_f_key_diff + left_half_of_f_key_diff) ks, 2 * offset_height]
         c4_middle:
+          key.column_net: C4
           rows.r4_modifiers.shift: [(-left_f_key_diff + 3 * left_f_key_diff + left_half_of_f_key_diff) ks, 2 * offset_height]
         c5_index:
+          key.column_net: C5
           rows.r4_modifiers.shift: [(-left_f_key_diff + 4 * left_f_key_diff + left_half_of_f_key_diff) ks, offset_height]
       rows:
         r4_modifiers:
@@ -183,7 +197,10 @@ points:
         width: 2 kx
         tags: [need_stabs]
       columns:
-        c6_inner.rows.r4_modifiers:
+        c6_inner:
+          key.column_net: C6
+          rows.r4_modifiers:
+            row_net: R4
     # ====== Right Hand ======
     # Crossing points: "+" means used crossing points, "x" means unused crossing points
     # Naming of columns and rows:
@@ -196,28 +213,36 @@ points:
     #    +         x         x       x        x        x         x         x    r5_thumb
     right_main:
       anchor:
-        shift: [250, 0] # space between 2 boards
+        shift: [200, 0] # space between 2 boards
       key:
         padding: kp
         spread: ks
       columns:
-        c0_inner.key.width: kx
+        c0_inner.key:
+          column_net: C0
+          width: kx
         c1_index.key:
+          column_net: C1
           stagger: offset_height
           width: kx
         c2_middle.key:
+          column_net: C2
           stagger: offset_height
           width: kx
         c3_ring.key:
+          column_net: C3
           stagger: -offset_height
           width: kx
         c4_pinky.key:
+          column_net: C4
           stagger: -offset_height
           width: kx
         c5_outer.key:
+          column_net: C5
           stagger: -offset_height
           width: kx
         c6_externel:
+          key.column_net: C6
           rows:
             r4_modifiers.width: kx
             r3_bottom:
@@ -235,20 +260,22 @@ points:
               width: 2 kx
               shift: [((2 - 1) / 2) kx, 0]
               tags: [need_stabs]
-        c7_last.rows:
-          r4_modifiers.skip: true
-          r3_bottom.skip: true
-          r2_home.skip: true
-          r1_top:
-            width: 1.5 kx
-            shift: [((1.5 - 1) / 2) kx, 0]
-          r0_numbers.skip: true
+        c7_last:
+          key.column_net: C7
+          rows:
+            r4_modifiers.skip: true
+            r3_bottom.skip: true
+            r2_home.skip: true
+            r1_top:
+              width: 1.5 kx
+              shift: [((1.5 - 1) / 2) kx, 0]
+            r0_numbers.skip: true
       rows:
-        r4_modifiers:
-        r3_bottom:
-        r2_home:
-        r1_top:
-        r0_numbers:
+        r4_modifiers.row_net: R4
+        r3_bottom.row_net: R3
+        r2_home.row_net: R2
+        r1_top.row_net: R1
+        r0_numbers.row_net: R0
     # right row 5
     right_thumb:
       anchor:
@@ -259,7 +286,9 @@ points:
         width: 2 kx
         tags: [need_stabs]
       columns:
-        c0_inner.rows.r5_thumb:
+        c0_inner:
+          key.column_net: C0
+          rows.r5_thumb.row_net: R5
     # ====== Controllers' position points ======
     controller_left:
       anchor:
@@ -383,3 +412,80 @@ outlines:
     - what: outline
       name: plate_right
       operation: stack
+pcbs:
+  left:
+    template: kicad8
+    outlines:
+      main:
+        outline: plate_left
+    footprints:
+      mcu:
+        what: ceoloide/mcu_supermini_nrf52840
+        where: 
+          ref: controller_left_board_r0 
+        params:
+          P1: C0
+          P0: C1
+          P2: C2
+          P3: C3
+          P4: C4
+          P5: C5
+          P6: C6
+          P7: C7
+          P21: R0
+          P20: R1
+          P19: R2
+          P18: R3
+          P15: R4
+          P14: R5
+      choc_switches:
+        what: ceoloide/switch_choc_v1_v2
+        where: /^left.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{row_net}}"
+      diodes:
+        what: ceoloide/diode_tht_sod123
+        where: /^left.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0, -5]
+  right:
+    template: kicad8
+    outlines:
+      main:
+        outline: plate_right
+    footprints:
+      mcu:
+        what: ceoloide/mcu_supermini_nrf52840
+        where: 
+          ref: controller_right_board_r0
+        params:
+          P1: C0
+          P0: C1
+          P2: C2
+          P3: C3
+          P4: C4
+          P5: C5
+          P6: C6
+          P7: C7
+          P21: R0
+          P20: R1
+          P19: R2
+          P18: R3
+          P15: R4
+          P14: R5
+      choc_switches:
+        what: ceoloide/switch_choc_v1_v2
+        where: /^right.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{row_net}}"
+      diodes:
+        what: ceoloide/diode_tht_sod123
+        where: /^right.*/
+        params:
+          from: "{{column_net}}"
+          to: "{{row_net}}"

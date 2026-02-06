@@ -35,11 +35,6 @@ switch_units: # switch unit configurations, reference from: https://github.com/c
     # offsets
     outline_extend_x: 21
     outline_extend_y: 0
-    diode_shift_x: 7.4
-    diode_shift_y: 1.325
-    led_shift_x: 0
-    led_shift_y: -4.75
-    switch_rotation: 0
   choc_base:
     # switch reference: http://www.kailh.com/product/Ms/Choc/
     # general units
@@ -60,11 +55,6 @@ switch_units: # switch unit configurations, reference from: https://github.com/c
     # offsets
     outline_extend_x: 21
     outline_extend_y: 0
-    diode_shift_x: -0.5 * 13.8 - 0.85
-    diode_shift_y: 1.5
-    led_shift_x: 0
-    led_shift_y: 4.7
-    switch_rotation: 180
   choc_v1:
     $extends: switch_units.choc_base
     ks: cx + 0.5

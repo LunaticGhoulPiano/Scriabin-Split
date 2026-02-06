@@ -8,47 +8,75 @@ meta:
   url: https://github.com/LunaticGhoulPiano/Scriabin-Split
   switch:
     $extends: switch_units.mx # <======================================== set your switch type here, refer to switch_units
-switch_units: # switch unit configurations
+switch_units: # switch unit configurations, reference from: https://github.com/ceoloide/corney-island
   # Official basic units: https://docs.ergogen.xyz/units
-  ## U: 19.05 # 19.05mm MX spacing
-  ## u: 19 # 19mm MX spacing
-  ## cx: 18 # 18mm Choc X spacing
-  ## cy: 17 # 17mm Choc Y spacing
+  ## U: 19.05mm MX spacing
+  ## u: 19mm MX spacing
+  ## cx: 18mm Choc X spacing
+  ## cy: 17mm Choc Y spacing
   mx:
     # switch reference: https://cdn.sparkfun.com/datasheets/Components/Switches/MX%20Series.pdf
     # general units
-    kx: U
-    ky: U
-    px: U + 1
-    py: U
+    kx: u # spacing between key centers (X-axis)
+    ky: u # spacing between key centers (Y-axis)
+    ks: u # key spread, space between X-axis
+    kp: u # key padding, space between Y-axis
+    keycap_x: 18
+    keycap_y: 18
+    # switch hole units (e.g. MXNA-11NB, 0.551 +- 0.002 inch * 25.4 ≈ 14 mm)
+    key_cutout_hole_width: 14
+    key_cutout_hole_height: 14
     # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
     # maybe reference this: https://github.com/swill/kad/issues/14
     stab_w: 7
     stab_h: 14
     stab_offset: -1 # This means south stabs, use `orient` to rotate them for north facing scenarios
     stab_spacing_2kx: kx / 2 + stab_w / 2 + ((23.8 / 2) - (14 / 2) - (stab_w / 2)) # The complex formula has two magic numbers. 14 is the size of a switch cutout for a plate. 23.8 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
-    # switch hole units (e.g. MXNA-11NB, 0.551 +- 0.002 inch * 25.4 ≈ 14 mm)
-    switch_hole_x: 14
-    switch_hole_y: 14
+    # offsets
     outline_extend_x: 21
     outline_extend_y: 0
-  choc:
+    diode_shift_x: 7.4
+    diode_shift_y: 1.325
+    led_shift_x: 0
+    led_shift_y: -4.75
+    switch_rotation: 0
+  choc_base:
     # switch reference: http://www.kailh.com/product/Ms/Choc/
     # general units
     kx: cx
     ky: cy
-    px: cx + 1
-    py: cy + 2
+    ks: cx
+    kp: cy
+    keycap_x: 17.5
+    keycap_y: 16.5
+    # switch hole units (e.g. CPG135301D02, 13.95 +- 0.05 mm ≈ 14 mm)
+    key_cutout_hole_width: 13.8
+    key_cutout_hole_height: 13.8
     # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
     stab_w: 5.5
     stab_h: 11.5
-    stab_offset: 0 # This means south stabs, use `orient` to rotate them for north facing scenarios
-    stab_spacing_2kx: kx / 2 + stab_w / 2 + ((24 / 2) - (11.5 / 2) - (stab_w / 2)) # The complex formula has two magic numbers. 11.5 is the size of a switch cutout for a plate. 24 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
-    # switch hole units (V2, e.g. CPG135301D02, 13.95 +- 0.05 mm ≈ 14 mm)
-    switch_hole_x: 13.8
-    switch_hole_y: 13.8
+    stab_offset: 0
+    stab_spacing_2kx: kx / 2 + stab_w / 2 + ((24 / 2) - (11.5 / 2) - (stab_w / 2))
+    # offsets
     outline_extend_x: 21
     outline_extend_y: 0
+    diode_shift_x: -0.5 * 13.8 - 0.85
+    diode_shift_y: 1.5
+    led_shift_x: 0
+    led_shift_y: 4.7
+    switch_rotation: 180
+  choc_v1:
+    $extends: switch_units.choc_base
+    ks: cx + 0.5
+    kp: cy + 0.5
+  choc_v2:
+    $extends: switch_units.choc_v1
+    kx: u
+    ky: u
+    ks: u
+    kp: u
+    key_cutout_hole_width: 14
+    key_cutout_hole_height: 14
 units:
   # load choosed switch actual units
   $extends: meta.switch
@@ -57,6 +85,10 @@ units:
   # left_function setting
   left_f_key_diff: 1.25 - 1
   left_half_of_f_key_diff: (1.25 - 1) / 2
+  # controller board units: ProMicro nRF52840 https://www.nologo.tech/product/otherboard/NRF52840.html
+  controller_width: 17.78
+  controller_height: 33
+  controller_expand: 6
 # switch layout
 points:
   zones:
@@ -71,8 +103,8 @@ points:
     # r4_modifiers       +         +        +       +        +         +       +
     left_main_keys:
       key:
-        padding: py
-        spread: px
+        padding: kp
+        spread: ks
       columns:
         c0_externel:
           rows:
@@ -119,40 +151,39 @@ points:
     left_function_keys:
       anchor:
         ref: left_main_keys_c0_externel_r0_numbers
-        shift: [0, -4 * py] 
+        shift: [0, -4 * kp] 
       key:
-        padding: py
-        spread: px
+        padding: kp
+        spread: ks
         width: 1.25 kx
       columns:
         c0_externel:
           rows.r4_modifiers:
             width: kx
-            shift: [-left_f_key_diff px, 0]
+            shift: [-left_f_key_diff ks, 0]
         c1_outer:
-          rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff) px, 0]
+          rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff) ks, 0]
         c2_pinky:
-          rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff + left_f_key_diff) px, offset_height]
+          rows.r4_modifiers.shift: [(-left_f_key_diff + left_half_of_f_key_diff + left_f_key_diff) ks, offset_height]
         c3_ring:
-          rows.r4_modifiers.shift: [(-left_f_key_diff + 2 * left_f_key_diff + left_half_of_f_key_diff) px, 2 * offset_height]
+          rows.r4_modifiers.shift: [(-left_f_key_diff + 2 * left_f_key_diff + left_half_of_f_key_diff) ks, 2 * offset_height]
         c4_middle:
-          rows.r4_modifiers.shift: [(-left_f_key_diff + 3 * left_f_key_diff + left_half_of_f_key_diff) px, 2 * offset_height]
+          rows.r4_modifiers.shift: [(-left_f_key_diff + 3 * left_f_key_diff + left_half_of_f_key_diff) ks, 2 * offset_height]
         c5_index:
-          rows.r4_modifiers.shift: [(-left_f_key_diff + 4 * left_f_key_diff + left_half_of_f_key_diff) px, offset_height]
+          rows.r4_modifiers.shift: [(-left_f_key_diff + 4 * left_f_key_diff + left_half_of_f_key_diff) ks, offset_height]
       rows:
         r4_modifiers:
     # left thumb (space)
     left_thumb_keys:
       anchor:
         ref: left_main_keys_c6_inner_r3_bottom
-        shift: [1.3 px, -1.2 py]
+        shift: [1.3 ks, -1.2 kp]
         rotate: 75
       key:
         width: 2 kx
         tags: [need_stabs]
       columns:
         c6_inner.rows.r4_modifiers:
-
     # ====== Right Hand ======
     # Crossing points: "+" means used crossing points, "x" means unused crossing points
     # Naming of columns and rows:
@@ -167,8 +198,8 @@ points:
       anchor:
         shift: [250, 0] # space between 2 boards
       key:
-        padding: py
-        spread: px
+        padding: kp
+        spread: ks
       columns:
         c0_inner.key.width: kx
         c1_index.key:
@@ -222,21 +253,44 @@ points:
     right_thumb:
       anchor:
         ref: right_main_c0_inner_r4_modifiers
-        shift: [-1.1 px, -0.8 py]
+        shift: [-1.1 ks, -0.8 kp]
         rotate: -75
       key:
         width: 2 kx
         tags: [need_stabs]
       columns:
         c0_inner.rows.r5_thumb:
+    # ====== Controllers' position points ======
+    controller_left:
+      anchor:
+        ref: left_main_keys_c6_inner_r0_numbers
+        shift: [22, -10]
+      key:
+        width: 0
+        height: 0
+      columns:
+        board:
+          rows:
+            r0:
+    controller_right:
+      anchor:
+        ref: right_main_c0_inner_r0_numbers
+        shift: [-22, -10]
+      key:
+        width: 0
+        height: 0
+      columns:
+        board:
+          rows:
+            r0:
 outlines:
   # 1. define switch hole
-  raw:
+  _raw:
     - what: rectangle
       where: true
-      size: [px, py]
+      size: [ks, kp]
   # 2. define stabilizer hole
-  stabs:
+  _stabs:
     - what: rectangle
       where: need_stabs
       size: [stab_w, stab_h]
@@ -247,45 +301,83 @@ outlines:
       size: [stab_w, stab_h]
       adjust:
         shift: [-stab_spacing_2kx, stab_offset]
-  # 3. generate left outer frame
-  pasted_left:
+  # 3. define controller shape
+  _left_controller_inner:
+    - what: rectangle
+      where: controller_left_board_r0
+      size: [controller_width, controller_height]
+  _right_controller_inner:
+    - what: rectangle
+      where: controller_right_board_r0
+      size: [controller_width, controller_height]
+  # 4. define controller outer frame
+  _left_controller_outer:
+    - what: rectangle
+      where: controller_left_board_r0
+      size: [controller_width + controller_expand, controller_height  + controller_expand]
+  _right_controller_outer:
+    - what: rectangle
+      where: controller_right_board_r0
+      size: [controller_width + controller_expand, controller_height  + controller_expand]
+  # 5. generate outer frame (only switches, controllers are not included)
+  _pasted_left:
     - what: rectangle
       where: /^left.*/
-      size: [px + outline_extend_x, py + outline_extend_y]
+      size: [ks + outline_extend_x, kp + outline_extend_y]
       bound: true
-  # 4. generate right outer frame
-  pasted_right:
+  _pasted_right:
     - what: rectangle
       where: /^right.*/
-      size: [px + outline_extend_x, py + outline_extend_y]
+      size: [ks + outline_extend_x, kp + outline_extend_y]
       bound: true
-  # 5. left plate
+  # 6. generate plates
   plate_left:
     # get outer frame
     - what: outline
-      name: pasted_left
+      name: _pasted_left
+    # extend controller shape
+    - what: outline
+      name: _left_controller_outer
+      operation: add
+    # smooth edges
+    - what: outline            
+      name: plate_left
+      expand: 2
+      fillet: 10
     # dig switch hole
     - what: rectangle
       where: /^left.*/
-      size: [switch_hole_x, switch_hole_y]
+      size: [key_cutout_hole_width, key_cutout_hole_height]
       operation: subtract
     # dig stabalizer hole
     - what: outline
-      name: stabs
+      name: _stabs
       operation: subtract
-  # 6. right plate
+    # extend controller
+    - what: outline
+      name: _left_controller_inner
+      operation: stack
   plate_right:
     - what: outline
-      name: pasted_right
+      name: _pasted_right
+    - what: outline
+      name: _right_controller_outer
+    - what: outline            
+      name: plate_right
+      expand: 2
+      fillet: 10
     - what: rectangle
       where: /^right.*/
-      size: [switch_hole_x, switch_hole_y]
+      size: [key_cutout_hole_width, key_cutout_hole_height]
       operation: subtract
     - what: outline
-      name: stabs
+      name: _stabs
       operation: subtract
+    - what: outline
+      name: _right_controller_inner
+      operation: stack
   # 7. preview
-  preview:
+  plate_preview:
     - what: outline
       name: plate_left
     - what: outline

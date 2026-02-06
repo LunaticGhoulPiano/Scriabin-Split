@@ -102,6 +102,8 @@ points:
     # r3_bottom          x         +        +       +        +         +       +
     # r4_modifiers       +         +        +       +        +         +       +
     left_main_keys:
+      anchor:
+        shift: [45, -100] # adjust in kicad layout
       key:
         padding: kp
         spread: ks
@@ -213,7 +215,7 @@ points:
     #    +         x         x       x        x        x         x         x    r5_thumb
     right_main:
       anchor:
-        shift: [200, 0] # space between 2 boards
+        shift: [245, -230] # adjust in kicad layout
       key:
         padding: kp
         spread: ks

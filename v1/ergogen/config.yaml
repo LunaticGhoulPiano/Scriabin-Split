@@ -1,6 +1,4 @@
 # presets
-footprints:
-  - footprints/ceoloide/*.js  # 告訴 Ergogen 讀取剛剛下載的 Submodule 封裝庫
 meta:
   engine: 4.2.1 # ergogen version
   name: Scriabin-Split
@@ -422,7 +420,7 @@ pcbs:
         outline: plate_left
     footprints:
       mcu:
-        what: mcu_supermini_nrf52840
+        what: ceoloide/mcu_supermini_nrf52840
         where: 
           ref: controller_left_board_r0 
         params:
@@ -441,13 +439,13 @@ pcbs:
           P15: R4
           P14: R5
       choc_switches:
-        what: switch_choc_v1_v2
+        what: ceoloide/switch_choc_v1_v2
         where: /^left.*/
         params:
           from: "{{column_net}}"
           to: "{{row_net}}"
       diodes:
-        what: diode_tht_sod123
+        what: ceoloide/diode_tht_sod123
         where: /^left.*/
         params:
           from: "{{column_net}}"
@@ -461,7 +459,7 @@ pcbs:
         outline: plate_right
     footprints:
       mcu:
-        what: mcu_supermini_nrf52840
+        what: ceoloide/mcu_supermini_nrf52840
         where: 
           ref: controller_right_board_r0
         params:
@@ -480,13 +478,13 @@ pcbs:
           P15: R4
           P14: R5
       choc_switches:
-        what: switch_choc_v1_v2
+        what: ceoloide/switch_choc_v1_v2
         where: /^right.*/
         params:
           from: "{{column_net}}"
           to: "{{row_net}}"
       diodes:
-        what: diode_tht_sod123
+        what: ceoloide/diode_tht_sod123
         where: /^right.*/
         params:
           from: "{{column_net}}"

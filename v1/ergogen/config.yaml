@@ -2,13 +2,10 @@
 meta:
   engine: 4.2.1 # ergogen version
   name: Scriabin-Split
-  side: left
   version: 0.0.1
   author: LunaticGhoulPiano
   url: https://github.com/LunaticGhoulPiano/Scriabin-Split
-  switch:
-    $extends: switch_units.mx # <======================================== set your switch type here, refer to switch_units
-switch_units: # switch unit configurations, reference from: https://github.com/ceoloide/corney-island
+switch_settings: # switch unit configurations, reference from: https://github.com/ceoloide/corney-island
   # Official basic units: https://docs.ergogen.xyz/units
   ## U: 19.05mm MX spacing
   ## u: 19mm MX spacing
@@ -56,11 +53,11 @@ switch_units: # switch unit configurations, reference from: https://github.com/c
     outline_extend_x: 21
     outline_extend_y: 0
   choc_v1:
-    $extends: switch_units.choc_base
+    $extends: switch_settings.choc_base
     ks: cx + 0.5
     kp: cy + 0.5
   choc_v2:
-    $extends: switch_units.choc_v1
+    $extends: switch_settings.choc_v1
     kx: u
     ky: u
     ks: u
@@ -69,7 +66,7 @@ switch_units: # switch unit configurations, reference from: https://github.com/c
     key_cutout_hole_height: 14
 units:
   # load choosed switch actual units
-  $extends: meta.switch
+  $extends: switch_settings.mx
   # stagger setting
   offset_height: 3.5
   # left_function setting
@@ -404,6 +401,7 @@ outlines:
     - what: outline
       name: plate_right
       operation: stack
+# PCB layout
 pcbs:
   left:
     template: kicad8
@@ -431,7 +429,7 @@ pcbs:
           P15: R4
           P14: R5
       choc_switches:
-        what: ceoloide/switch_choc_v1_v2
+        what: ceoloide/switch_mx
         where: /^left.*/
         params:
           from: "{{column_net}}"
@@ -470,7 +468,7 @@ pcbs:
           P15: R4
           P14: R5
       choc_switches:
-        what: ceoloide/switch_choc_v1_v2
+        what: ceoloide/switch_mx
         where: /^right.*/
         params:
           from: "{{column_net}}"

@@ -5,68 +5,75 @@ meta:
   version: 0.0.1
   author: LunaticGhoulPiano
   url: https://github.com/LunaticGhoulPiano/Scriabin-Split
-switch_settings: # switch unit configurations, reference from: https://github.com/ceoloide/corney-island
-  # Official basic units: https://docs.ergogen.xyz/units
-  ## U: 19.05mm MX spacing
-  ## u: 19mm MX spacing
-  ## cx: 18mm Choc X spacing
-  ## cy: 17mm Choc Y spacing
-  mx:
-    # switch reference: https://cdn.sparkfun.com/datasheets/Components/Switches/MX%20Series.pdf
-    # general units
-    kx: u # spacing between key centers (X-axis)
-    ky: u # spacing between key centers (Y-axis)
-    ks: u # key spread, space between X-axis
-    kp: u # key padding, space between Y-axis
-    keycap_x: 18
-    keycap_y: 18
-    # switch hole units (e.g. MXNA-11NB, 0.551 +- 0.002 inch * 25.4 ≈ 14 mm)
-    key_cutout_hole_width: 14
-    key_cutout_hole_height: 14
-    # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
-    # maybe reference this: https://github.com/swill/kad/issues/14
-    stab_w: 7
-    stab_h: 14
-    stab_offset: -1 # This means south stabs, use `orient` to rotate them for north facing scenarios
-    stab_spacing_2kx: kx / 2 + stab_w / 2 + ((23.8 / 2) - (14 / 2) - (stab_w / 2)) # The complex formula has two magic numbers. 14 is the size of a switch cutout for a plate. 23.8 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
-    # offsets
-    outline_extend_x: 21
-    outline_extend_y: 0
-  choc_base:
-    # switch reference: http://www.kailh.com/product/Ms/Choc/
-    # general units
-    kx: cx
-    ky: cy
-    ks: cx
-    kp: cy
-    keycap_x: 17.5
-    keycap_y: 16.5
-    # switch hole units (e.g. CPG135301D02, 13.95 +- 0.05 mm ≈ 14 mm)
-    key_cutout_hole_width: 13.8
-    key_cutout_hole_height: 13.8
-    # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
-    stab_w: 5.5
-    stab_h: 11.5
-    stab_offset: 0
-    stab_spacing_2kx: kx / 2 + stab_w / 2 + ((24 / 2) - (11.5 / 2) - (stab_w / 2))
-    # offsets
-    outline_extend_x: 21
-    outline_extend_y: 0
-  choc_v1:
-    $extends: switch_settings.choc_base
-    ks: cx + 0.5
-    kp: cy + 0.5
-  choc_v2:
-    $extends: switch_settings.choc_v1
-    kx: u
-    ky: u
-    ks: u
-    kp: u
-    key_cutout_hole_width: 14
-    key_cutout_hole_height: 14
+  # can't work if units.$extends: [meta.switch_settings.mx, meta.footprint_settings.v1]
+  footprint_settings:
+    v1:
+      mcu_footprint: "ceoloide/mcu_supermini_nrf52840"
+      switch_footprint: "ceoloide/switch_mx"
+      diode_footprint: "ceoloide/diode_tht_sod123"
+  # switch unit configurations, reference from: https://github.com/ceoloide/corney-island
+  switch_settings:
+    # Official basic units: https://docs.ergogen.xyz/units
+    ## U: 19.05mm MX spacing
+    ## u: 19mm MX spacing
+    ## cx: 18mm Choc X spacing
+    ## cy: 17mm Choc Y spacing
+    mx:
+      # switch reference: https://cdn.sparkfun.com/datasheets/Components/Switches/MX%20Series.pdf
+      # general units
+      kx: u # spacing between key centers (X-axis)
+      ky: u # spacing between key centers (Y-axis)
+      ks: u # key spread, space between X-axis
+      kp: u # key padding, space between Y-axis
+      keycap_x: 18
+      keycap_y: 18
+      # switch hole units (e.g. MXNA-11NB, 0.551 +- 0.002 inch * 25.4 ≈ 14 mm)
+      key_cutout_hole_width: 14
+      key_cutout_hole_height: 14
+      # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
+      # maybe reference this: https://github.com/swill/kad/issues/14
+      stab_w: 7
+      stab_h: 14
+      stab_offset: -1 # This means south stabs, use `orient` to rotate them for north facing scenarios
+      stab_spacing_2kx: kx / 2 + stab_w / 2 + ((23.8 / 2) - (14 / 2) - (stab_w / 2)) # The complex formula has two magic numbers. 14 is the size of a switch cutout for a plate. 23.8 is the distance between each stabilizer on a 2-2.75u stabilizer, as specified by Cherry
+      # offsets
+      outline_extend_x: 21
+      outline_extend_y: 0
+    choc_base:
+      # switch reference: http://www.kailh.com/product/Ms/Choc/
+      # general units
+      kx: cx
+      ky: cy
+      ks: cx
+      kp: cy
+      keycap_x: 17.5
+      keycap_y: 16.5
+      # switch hole units (e.g. CPG135301D02, 13.95 +- 0.05 mm ≈ 14 mm)
+      key_cutout_hole_width: 13.8
+      key_cutout_hole_height: 13.8
+      # stabilier units, reference by: https://github.com/Woovie/useful-ergogen-components/blob/main/2u-stabilizer-cutout.yaml
+      stab_w: 5.5
+      stab_h: 11.5
+      stab_offset: 0
+      stab_spacing_2kx: kx / 2 + stab_w / 2 + ((24 / 2) - (11.5 / 2) - (stab_w / 2))
+      # offsets
+      outline_extend_x: 21
+      outline_extend_y: 0
+    choc_v1:
+      $extends: meta.switch_settings.choc_base
+      ks: cx + 0.5
+      kp: cy + 0.5
+    choc_v2:
+      $extends: meta.switch_settings.choc_v1
+      kx: u
+      ky: u
+      ks: u
+      kp: u
+      key_cutout_hole_width: 14
+      key_cutout_hole_height: 14
 units:
   # load choosed switch actual units
-  $extends: switch_settings.mx
+  $extends: meta.switch_settings.mx # <================================ change here: mx, choc_v1 or choc_v2
   # stagger setting
   offset_height: 3.5
   # left_function setting
